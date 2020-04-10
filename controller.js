@@ -36,11 +36,11 @@ PHI_slider.addEventListener('input', e => {
     PHI_value.textContent = PHI;
 });
 
-const PIH_slider = document.querySelector('#PIH-slider');
-const PIH_value = document.querySelector('#PIH-value');
-PIH_slider.addEventListener('input', e => {
-    PIH += (PIH_slider.value / 100 - PIH)
-    PIH_value.textContent = PIH;
+const PID_slider = document.querySelector('#PID-slider');
+const PID_value = document.querySelector('#PID-value');
+PID_slider.addEventListener('input', e => {
+    PID += (PID_slider.value / 100 - PID)
+    PID_value.textContent = PID;
 });
 
 const REPULSE_slider = document.querySelector('#REPULSE-slider');

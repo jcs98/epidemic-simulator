@@ -22,15 +22,36 @@ function draw() {
     background(0);
     frameRate(FPS);
 
+    BOXES.forEach(box => {
+        fill(0);
+        strokeWeight(3);
+        stroke(255);
+        rect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
+        stroke(0);
+        strokeWeight(1);
+    });
+
     drawPopulation();
 
     nextRound();
 }
 
 function drawPopulation() {
-    fill(0, 123, 255);
 
     for (let i = 0; i < population.length; i++) {
-        ellipse(population[i].x, population[i].y, 10, 10);
+        const person = population[i];
+
+        if (person.status == status.HEALTHY)
+            fill(0, 123, 255);
+        if (person.status == status.INFECTED) {
+            noFill();
+            stroke(150, 53, 69);
+            ellipse(person.x, person.y, INFECTION_RADIUS, INFECTION_RADIUS);
+            stroke(0);
+            fill(220, 53, 69);
+        }
+        if (person.status == status.DECEASED)
+            fill(123, 123, 123);
+        ellipse(person.x, person.y, 10, 10);
     }
 }
