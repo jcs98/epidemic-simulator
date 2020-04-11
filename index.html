@@ -16,7 +16,9 @@
 <body>
 
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <a href="https://github.com/jcs98/epidemic-simulator" target="_blank" class="navbar-brand">Epidemic Simulator</a>
+        <a href="https://github.com/jcs98/epidemic-simulator" target="_blank" class="navbar-brand">
+            Epidemic Simulator
+        </a>
         <div class="container">
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -41,6 +43,13 @@
                         <label for="REPULSE">Social Distancing</label>
                         <div id="REPULSE-value" class="badge badge-primary float-right">0.5</div>
                         <input type="range" id="REPULSE-slider" class="custom-range" min="0" max="100" value="50"
+                            step="10">
+                    </div>
+
+                    <div class="col">
+                        <label for="PTRAVEL">Travel Probability</label>
+                        <div id="PTRAVEL-value" class="badge badge-primary float-right">0.7</div>
+                        <input type="range" id="PTRAVEL-slider" class="custom-range" min="0" max="100" value="70"
                             step="10">
                     </div>
 

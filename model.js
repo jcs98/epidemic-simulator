@@ -2,7 +2,7 @@ let PHI = 0.01;
 const INFECTION_RADIUS = 20;
 
 let PID = 0.4;
-const INFECTION_DAYS = 140;
+const INFECTION_DAYS = 280;
 
 let REPULSE = 0.1;
 let FPS = 12;
@@ -17,6 +17,8 @@ const directions = { UP: "UP", DOWN: "DOWN", LEFT: "LEFT", RIGHT: "RIGHT" };
 const DIRECTION_CHANGE_PROB = 0.3;
 const status = { HEALTHY: "HEALTHY", INFECTED: "INFECTED", DECEASED: "DECEASED" };
 
+let travelPlan = { personIndex: -1, destinationX: -1, destinationY: -1 };
+let PTRAVEL = 0.7;
 
 function setupPopulation() {
     days = 0;
@@ -30,6 +32,7 @@ function setupPopulation() {
         let dir = Object.keys(directions)[randomIntFromRange(0, 3)];
         population[i].dir = dir;
         population[i].status = status.HEALTHY;
+        population[i].box = BOXES[boxNo];
     }
 
     // Randomly infect one
@@ -48,7 +51,6 @@ function nextRound() {
 
     for (let i = 0; i < population.length; i++) {
         let person = population[i];
-        let boxNo = i % BOXES.length;
 
         // if infected -> infect nearby, try to heal
         if (person.status == status.INFECTED) {
@@ -65,9 +67,12 @@ function nextRound() {
                 person.dir = dir;
             }
 
-            move(person, person.dir, BOXES[boxNo]);
+            move(person, person.dir, person.box);
         }
     }
+
+    // random migrations
+    migrate();
 }
 
 function move(person, direction, box) {
@@ -101,9 +106,7 @@ function infectNearby(infected) {
     population.forEach(person => {
         if (person.status == status.HEALTHY
             && dist(infected.x, infected.y, person.x, person.y) <= INFECTION_RADIUS) {
-            console.log("Found nearby...");
             if (random() < PHI) {
-                console.log("Infecting!");
                 person.status = status.INFECTED;
                 person.infectedDays = 0;
             }
@@ -117,5 +120,47 @@ function tryToHeal(person) {
             person.status = status.DECEASED;
         else
             person.status = status.HEALTHY;
+    }
+}
+
+function migrate() {
+    if (travelPlan.personIndex < 0) {
+        // if noone migrating, pick someone randomly to migrate with certain probability
+        if (random() < PTRAVEL) {
+            let personI = floor(random(POP_SIZE));
+            if (population[personI].status !== status.DECEASED) {
+                let newBox = BOXES[floor(random(BOXES.length))];
+                population[personI].box = newBox;
+
+                travelPlan.personIndex = personI;
+                travelPlan.destinationX = floor((newBox.x1 + newBox.x2) / 2);
+                travelPlan.destinationY = floor((newBox.y1 + newBox.y2) / 2);
+            }
+        }
+    }
+    else {
+        // move the currently migrating person towards destination
+        let moved = false;
+        let person = population[travelPlan.personIndex];
+        if (person.x + 20 < travelPlan.destinationX) {
+            person.x += 10;
+            moved = true;
+        }
+        if (person.x - 20 > travelPlan.destinationX) {
+            person.x -= 10;
+            moved = true;
+        }
+        if (person.y + 20 < travelPlan.destinationY) {
+            person.y += 10;
+            moved = true;
+        }
+        if (person.y - 20 > travelPlan.destinationY) {
+            person.y -= 10;
+            moved = true;
+        }
+
+        // reached destination
+        if (!moved)
+            travelPlan.personIndex = -1;
     }
 }

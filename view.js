@@ -53,5 +53,10 @@ function drawPopulation() {
         if (person.status == status.DECEASED)
             fill(123, 123, 123);
         ellipse(person.x, person.y, 10, 10);
+
+        // if (i == travelPlan.personIndex) {
+        //     fill(138, 43, 226);
+        //     ellipse(person.x, person.y, 10, 10);
+        // }
     }
 }

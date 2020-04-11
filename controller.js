@@ -43,6 +43,13 @@ PID_slider.addEventListener('input', e => {
     PID_value.textContent = PID;
 });
 
+const PTRAVEL_slider = document.querySelector('#PTRAVEL-slider');
+const PTRAVEL_value = document.querySelector('#PTRAVEL-value');
+PTRAVEL_slider.addEventListener('input', e => {
+    PTRAVEL += (PTRAVEL_slider.value / 100 - PTRAVEL)
+    PTRAVEL_value.textContent = PTRAVEL;
+});
+
 const REPULSE_slider = document.querySelector('#REPULSE-slider');
 const REPULSE_value = document.querySelector('#REPULSE-value');
 REPULSE_slider.addEventListener('input', e => {
