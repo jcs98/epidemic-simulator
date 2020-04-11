@@ -1,5 +1,7 @@
-const CANVAS_WIDTH = 1400;
+const CANVAS_WIDTH = 950;
 const CANVAS_HEIGHT = 650;
+
+const colors = { HEALTHY: "rgb(0, 123, 255)", INFECTED: "rgb(220, 53, 69)", DECEASED: "rgb(123, 123, 123)" }
 
 const BOXES = [
     { x1: 30, y1: 30, x2: 300, y2: 300 },
@@ -14,7 +16,7 @@ const BOXES = [
 
 function setup() {
     let canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-    canvas.parent('canvas-container');
+    canvas.parent("canvas-container");
     setupPopulation();
 }
 
@@ -31,27 +33,22 @@ function draw() {
         strokeWeight(1);
     });
 
-    drawPopulation();
-
     nextRound();
+    drawPopulation();
 }
 
 function drawPopulation() {
-
     for (let i = 0; i < population.length; i++) {
         const person = population[i];
 
-        if (person.status == status.HEALTHY)
-            fill(0, 123, 255);
         if (person.status == status.INFECTED) {
             noFill();
-            stroke(150, 53, 69);
+            stroke(color("rgb(220, 53, 69)"));
             ellipse(person.x, person.y, INFECTION_RADIUS, INFECTION_RADIUS);
             stroke(0);
-            fill(220, 53, 69);
         }
-        if (person.status == status.DECEASED)
-            fill(123, 123, 123);
+
+        fill(color(colors[person.status]))
         ellipse(person.x, person.y, 10, 10);
 
         // if (i == travelPlan.personIndex) {
@@ -59,4 +56,61 @@ function drawPopulation() {
         //     ellipse(person.x, person.y, 10, 10);
         // }
     }
+}
+
+function drawGraph() {
+    const graph = {};
+
+    graph.title = { text: "Epidemic Statistics" };
+    graph.subtitle = { text: "This does not, in any way, represent any real world data!" };
+
+    graph.xAxis = { categories: daysData };
+    graph.yAxis = {
+        title: {
+            text: "Number of cases"
+        },
+        plotLines: [{
+            value: 0,
+            width: 1,
+            color: "#808080"
+        }]
+    };
+
+    graph.series = [
+        {
+            name: "Healthy",
+            data: healthyData,
+            color: colors[status.HEALTHY]
+        },
+        {
+            name: "Infected",
+            data: infectedData,
+            color: colors[status.INFECTED]
+        },
+        {
+            name: "Deceased",
+            data: deceasedData,
+            color: colors[status.DECEASED]
+        }
+    ];
+
+    graph.tooltip = { valueSuffix: " cases" };
+    graph.legend = {
+        layout: "vertical",
+        align: "right",
+        verticalAlign: "top",
+        borderWidth: 0
+    };
+
+    graph.plotOptions = {
+        series: {
+            marker: {
+                enabled: false,
+                symbol: "circle"
+            },
+            animation: false
+        }
+    };
+
+    $("#graph-container").highcharts(graph);
 }

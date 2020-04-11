@@ -20,10 +20,21 @@ const status = { HEALTHY: "HEALTHY", INFECTED: "INFECTED", DECEASED: "DECEASED" 
 let travelPlan = { personIndex: -1, destinationX: -1, destinationY: -1 };
 let PTRAVEL = 0.7;
 
+// for graph
+let daysData;
+let healthyData;
+let infectedData;
+let deceasedData;
+
 function setupPopulation() {
     days = 0;
 
     population = [];
+
+    daysData = [];
+    healthyData = [];
+    infectedData = [];
+    deceasedData = [];
 
     for (let i = 0; i < POP_SIZE; i++) {
         let boxNo = i % BOXES.length;
@@ -34,6 +45,8 @@ function setupPopulation() {
         population[i].status = status.HEALTHY;
         population[i].box = BOXES[boxNo];
     }
+
+    updateStats();
 
     // Randomly infect one
     let p = population[floor(random(POP_SIZE))];
@@ -73,6 +86,8 @@ function nextRound() {
 
     // random migrations
     migrate();
+
+    updateStats();
 }
 
 function move(person, direction, box) {
@@ -163,4 +178,33 @@ function migrate() {
         if (!moved)
             travelPlan.personIndex = -1;
     }
+}
+
+function updateStats() {
+    let healthyCount = 0;
+    let infectedCount = 0;
+    let deceasedCount = 0;
+
+    population.forEach(person => {
+        if (person.status == status.HEALTHY)
+            healthyCount++;
+        if (person.status == status.INFECTED)
+            infectedCount++;
+        if (person.status == status.DECEASED)
+            deceasedCount++;
+    });
+
+    if (days % 50 === 0 || infectedCount <= 0) {
+        daysData.push(days);
+        healthyData.push(healthyCount);
+        infectedData.push(infectedCount);
+        deceasedData.push(deceasedCount);
+        drawGraph();
+
+        if (infectedCount <= 0) {
+            // epidemic eradicated
+            togglePause();
+        }
+    }
+
 }
