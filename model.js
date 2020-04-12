@@ -1,7 +1,7 @@
-let PHI = 0.01;
+let PHI = 0.03;
 const INFECTION_RADIUS = 20;
 
-let PID = 0.4;
+let PID = 0.2;
 const INFECTION_DAYS = 280;
 
 let REPULSE = 0.1;
@@ -10,7 +10,7 @@ let FPS = 12;
 
 let paused = false;
 let days;
-const POP_SIZE = 600;
+const POP_SIZE = 300;
 let population;
 
 const directions = { UP: "UP", DOWN: "DOWN", LEFT: "LEFT", RIGHT: "RIGHT" };
@@ -72,10 +72,12 @@ function nextRound() {
             tryToHeal(person);
         }
 
-        // if not deceased, move randomly
         if (person.status !== status.DECEASED) {
+            if (random() < REPULSE) {
+                person.dir = getSafestDirection(person);
+            }
             // randomly change direction
-            if (random() < DIRECTION_CHANGE_PROB) {
+            else if (random() < DIRECTION_CHANGE_PROB) {
                 let dir = Object.keys(directions)[randomIntFromRange(0, 3)];
                 person.dir = dir;
             }
@@ -115,6 +117,42 @@ function move(person, direction, box) {
         person.y = newY;
     }
 
+}
+
+// returns the direction opposite to the closest neighbor
+function getSafestDirection(person) {
+    let leftClosest = 999, rightClosest = 999, upClosest = 999, downClosest = 999;
+
+    population.forEach(p => {
+        if (person.box === p.box) {
+            let d = dist(person.x, person.y, p.x, p.y);
+            if (p.x < person.x && leftClosest > d)
+                leftClosest = d;
+            if (p.x > person.x && rightClosest > d)
+                rightClosest = d;
+            if (p.y > person.y && upClosest > d)
+                upClosest = d;
+            if (p.y < person.y && downClosest > d)
+                downClosest = d;
+        }
+    });
+
+    let closest = leftClosest;
+    let safestDir = directions.RIGHT;
+    if (rightClosest < closest) {
+        closest = rightClosest;
+        safestDir = directions.LEFT;
+    }
+    if (upClosest < closest) {
+        closest = upClosest;
+        safestDir = directions.DOWN;
+    }
+    if (downClosest < closest) {
+        closest = downClosest;
+        safestDir = directions.UP;
+    }
+
+    return safestDir;
 }
 
 function infectNearby(infected) {
