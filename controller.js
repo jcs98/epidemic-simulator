@@ -71,3 +71,22 @@ FPS_slider.addEventListener('input', e => {
     FPS_value.textContent = FPS;
 });
 
+function setupControls() {
+    PHI_slider.value = PHI * 100;
+    PHI_value.textContent = PHI;
+
+    P_DETECTION_slider.value = P_DETECTION * 100;
+    P_DETECTION_value.textContent = P_DETECTION;
+
+    PID_slider.value = PID * 100;
+    PID_value.textContent = PID;
+
+    PTRAVEL_slider.value = PTRAVEL * 100;
+    PTRAVEL_value.textContent = PTRAVEL;
+
+    REPULSE_slider.value = REPULSE * 100;
+    REPULSE_value.textContent = REPULSE;
+
+    FPS_slider.value = FPS * 100;
+    FPS_value.textContent = FPS;
+}

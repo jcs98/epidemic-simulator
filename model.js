@@ -1,20 +1,22 @@
-let PHI = 0.03;
-const INFECTION_RADIUS = 20;
+// control params
+let PHI = 0.1;
 let PID = 0.2;
-const INFECTION_DAYS = 280;
+let P_DETECTION = 0.1;
 let REPULSE = 0.1;
+let PTRAVEL = 0.7;
 let FPS = 12;
+
+// other params
+const POP_SIZE = 250;
+const INFECTION_RADIUS = 20;
+const INFECTION_DAYS = 280;
+const DIRECTION_CHANGE_PROB = 0.3;
+
 let paused = false;
 let days;
-const POP_SIZE = 250;
 let population;
-
 const directions = { UP: "UP", DOWN: "DOWN", LEFT: "LEFT", RIGHT: "RIGHT" };
-const DIRECTION_CHANGE_PROB = 0.3;
 const status = { HEALTHY: "HEALTHY", INFECTED: "INFECTED", DECEASED: "DECEASED" };
-
-let PTRAVEL = 0.7;
-let P_DETECTION = 0.3;
 
 // for graph
 let daysData;
