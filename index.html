@@ -19,7 +19,7 @@
         <a href="https://github.com/jcs98/epidemic-simulator" target="_blank" class="navbar-brand">
             Epidemic Simulator
         </a>
-        <div class="container">
+        <div class="container-fluid">
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -86,9 +86,24 @@
         </div>
     </nav>
 
-    <div class="container-fluid d-flex">
-        <div id="canvas-container" style="margin: 0 auto;"></div>
-        <div id="graph-container" style="margin: 0 auto;"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div id="canvas-container" style="margin: 0 auto;"></div>
+            </div>
+
+            <div class="col text-center">
+                <h5 class="text-white mt-4">
+                    Healthy: <strong class="mr-4" id="healthy-count"></strong>
+                    Infected: <strong class="mr-4" id="infected-count"></strong>
+                    Deceased: <strong class="mr-4" id="deceased-count"></strong>
+                </h5>
+                <h4 class="text-white mt-4" id="eradicated"></h4>
+
+                <div id="graph-container" class="mt-4" style="margin: 0 auto;"></div>
+            </div>
+
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

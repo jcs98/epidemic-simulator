@@ -34,6 +34,7 @@ function setupPopulation() {
     healthyData = [];
     infectedData = [];
     deceasedData = [];
+    $("#eradicated").html("");
 
     for (let i = 0; i < POP_SIZE; i++) {
         let boxNo = i % BOXES.length;
@@ -46,12 +47,12 @@ function setupPopulation() {
         population[i].isTravelling = false;
     }
 
-    updateStats();
-
     // Randomly infect one
     let p = population[floor(random(POP_SIZE))];
     p.status = status.INFECTED;
     p.infectedDays = 0;
+
+    updateStats();
 
     // Start with pause
     if (!paused)
@@ -293,8 +294,10 @@ function updateStats() {
 
         if (infectedCount <= 0) {
             // epidemic eradicated
+            $("#eradicated").html("Epidemic Eradicated!");
             togglePause();
         }
     }
 
+    updateStatsDisplay(healthyCount, infectedCount, deceasedCount);
 }

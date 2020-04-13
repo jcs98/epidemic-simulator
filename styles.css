@@ -2,6 +2,7 @@ html,
 body {
     margin: 0;
     padding: 0;
+    background: black;
 }
 canvas {
     display: block;
@@ -28,4 +29,16 @@ canvas {
 }
 .playpause input[type="checkbox"]:focus + label {
     box-shadow: 0 0 5px lightblue;
+}
+
+#healthy-count {
+    color: rgb(0, 123, 255);
+}
+
+#infected-count {
+    color: rgb(220, 53, 69);
+}
+
+#deceased-count {
+    color: rgb(123, 123, 123);
 }

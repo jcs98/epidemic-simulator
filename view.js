@@ -119,14 +119,6 @@ function drawGraph() {
         }
     ];
 
-    graph.tooltip = { valueSuffix: " cases" };
-    graph.legend = {
-        layout: "vertical",
-        align: "right",
-        verticalAlign: "top",
-        borderWidth: 0
-    };
-
     graph.plotOptions = {
         series: {
             marker: {

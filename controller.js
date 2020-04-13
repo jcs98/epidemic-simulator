@@ -90,3 +90,9 @@ function setupControls() {
     FPS_slider.value = FPS;
     FPS_value.textContent = FPS;
 }
+
+function updateStatsDisplay(healthyCount, infectedCount, deceasedCount) {
+    $("#healthy-count").html(healthyCount);
+    $("#infected-count").html(infectedCount);
+    $("#deceased-count").html(deceasedCount);
+}
