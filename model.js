@@ -11,6 +11,7 @@ const POP_SIZE = 250;
 const INFECTION_RADIUS = 20;
 const INFECTION_DAYS = 280;
 const DIRECTION_CHANGE_PROB = 0.3;
+const PCENTRAL_LOCATIONS = 0.001;
 
 let paused = false;
 let days;
@@ -92,6 +93,8 @@ function actions() {
         }
     });
 
+    // set move to central locations
+    setMoveToCentral();
     // random migrations
     setMigration();
     // move infected to hospital
@@ -217,7 +220,9 @@ function setMigration() {
     if (random() < PTRAVEL) {
         let person = population[floor(random(POP_SIZE))];
 
-        if (!person.isTravelling && person.status !== status.DECEASED) {
+        if (!person.isTravelling
+            && person.status !== status.DECEASED
+            && person.box !== HOSPITAL) {
             let newBox = BOXES[floor(random(BOXES.length))];
             person.box = newBox;
             person.isTravelling = true;
@@ -225,6 +230,20 @@ function setMigration() {
             person.destinationY = floor((newBox.y1 + newBox.y2) / 2);
         }
     }
+}
+
+function setMoveToCentral() {
+    population.forEach(person => {
+        if (!person.isTravelling
+            && person.status !== status.DECEASED
+            && person.box !== HOSPITAL) {
+            if (random() < PCENTRAL_LOCATIONS) {
+                person.isTravelling = true;
+                person.destinationX = floor((person.box.x1 + person.box.x2) / 2);
+                person.destinationY = floor((person.box.y1 + person.box.y2) / 2);
+            }
+        }
+    });
 }
 
 function moveTowardDestination(person) {

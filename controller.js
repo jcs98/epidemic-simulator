@@ -87,6 +87,6 @@ function setupControls() {
     REPULSE_slider.value = REPULSE * 100;
     REPULSE_value.textContent = REPULSE;
 
-    FPS_slider.value = FPS * 100;
+    FPS_slider.value = FPS;
     FPS_value.textContent = FPS;
 }

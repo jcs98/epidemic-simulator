@@ -32,6 +32,14 @@ function draw() {
 
     BOXES.forEach(box => {
         rect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
+
+        // central location
+        rect(
+            (box.x1 + box.x2) / 2 - 10,
+            (box.y1 + box.y2) / 2 - 10,
+            ((box.x1 + box.x2) / 2 + 10) - ((box.x1 + box.x2) / 2 - 10),
+            ((box.y1 + box.y2) / 2 + 10) - ((box.y1 + box.y2) / 2 - 10)
+        );
     });
 
     rect(HOSPITAL.x1, HOSPITAL.y1, HOSPITAL.x2 - HOSPITAL.x1, HOSPITAL.y2 - HOSPITAL.y1);
