@@ -42,3 +42,7 @@ canvas {
 #deceased-count {
     color: rgb(123, 123, 123);
 }
+
+#graph-container {
+    height: 500px;
+}

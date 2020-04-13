@@ -1,6 +1,9 @@
 const CANVAS_WIDTH = 950;
 const CANVAS_HEIGHT = 650;
 
+const MOBILE_CANVAS_WIDTH = 330;
+const MOBILE_CANVAS_HEIGHT = 330;
+
 const colors = { HEALTHY: "rgb(0, 123, 255)", INFECTED: "rgb(220, 53, 69)", DECEASED: "rgb(123, 123, 123)" }
 
 const BOXES = [
@@ -8,15 +11,27 @@ const BOXES = [
     { x1: 330, y1: 30, x2: 600, y2: 300 },
     { x1: 630, y1: 30, x2: 900, y2: 300 },
 
-    { x1: 30, y1: 330, x2: 300, y2: 600 },
-    { x1: 330, y1: 330, x2: 600, y2: 600 }
+    // { x1: 30, y1: 330, x2: 300, y2: 600 },
+    { x1: 330, y1: 330, x2: 600, y2: 600 },
+    { x1: 630, y1: 330, x2: 900, y2: 600 }
 ]
 
-const HOSPITAL = { x1: 680, y1: 380, x2: 850, y2: 550 };
+const HOSPITAL = { x1: 30 + 20, y1: 330 + 20, x2: 300 - 20, y2: 600 - 20 };
 
 
 function setup() {
-    let canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    console.log($(window).width());
+
+    let canvas;
+    if (onMobile()) {
+        canvas = createCanvas(MOBILE_CANVAS_WIDTH, MOBILE_CANVAS_HEIGHT);
+        BOXES.splice(4, 1);
+        BOXES.splice(2, 1);
+    }
+    else {
+        canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    }
+
     canvas.parent("canvas-container");
     setGraphOptions();
     setupControls();
@@ -24,6 +39,10 @@ function setup() {
 }
 
 function draw() {
+    if (onMobile()) {
+        scale(0.5);
+    }
+
     background(0);
     frameRate(FPS);
 
@@ -92,9 +111,7 @@ function setGraphOptions() {
 
 function drawGraph() {
     const graph = {};
-
     graph.title = { text: "Epidemic Statistics" };
-    graph.subtitle = { text: "This does not, in any way, represent any real world data!" };
 
     graph.xAxis = { categories: daysData };
     graph.yAxis = {

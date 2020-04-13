@@ -7,7 +7,7 @@ let PTRAVEL = 0.7;
 let FPS = 12;
 
 // other params
-const POP_SIZE = 250;
+const POP_SIZE = 50; // per box
 const INFECTION_RADIUS = 20;
 const INFECTION_DAYS = 280;
 const DIRECTION_CHANGE_PROB = 0.3;
@@ -36,7 +36,7 @@ function setupPopulation() {
     deceasedData = [];
     $("#eradicated").html("");
 
-    for (let i = 0; i < POP_SIZE; i++) {
+    for (let i = 0; i < POP_SIZE * BOXES.length; i++) {
         let boxNo = i % BOXES.length;
         population[i] = createVector(randomIntFromRange(BOXES[boxNo].x1, BOXES[boxNo].x2),
             randomIntFromRange(BOXES[boxNo].y1, BOXES[boxNo].y2));
