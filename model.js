@@ -1,16 +1,12 @@
 let PHI = 0.03;
 const INFECTION_RADIUS = 20;
-
 let PID = 0.2;
 const INFECTION_DAYS = 280;
-
 let REPULSE = 0.1;
 let FPS = 12;
-
-
 let paused = false;
 let days;
-const POP_SIZE = 300;
+const POP_SIZE = 250;
 let population;
 
 const directions = { UP: "UP", DOWN: "DOWN", LEFT: "LEFT", RIGHT: "RIGHT" };
@@ -19,6 +15,9 @@ const status = { HEALTHY: "HEALTHY", INFECTED: "INFECTED", DECEASED: "DECEASED" 
 
 let travelPlan = { personIndex: -1, destinationX: -1, destinationY: -1 };
 let PTRAVEL = 0.7;
+let hospitalTravelPlan = { personIndex: -1, destinationX: -1, destinationY: -1 };
+let P_DETECTION = 0.3;
+let recoveryPlan = { personIndex: -1, destinationX: -1, destinationY: -1 };
 
 // for graph
 let daysData;
@@ -60,13 +59,13 @@ function setupPopulation() {
 
 function nextRound() {
     days++;
-    console.log(days);
+    // console.log(days);
 
     for (let i = 0; i < population.length; i++) {
         let person = population[i];
 
         // if infected -> infect nearby, try to heal
-        if (person.status == status.INFECTED) {
+        if (person.status === status.INFECTED) {
             person.infectedDays++;
             infectNearby(person);
             tryToHeal(person);
@@ -88,6 +87,11 @@ function nextRound() {
 
     // random migrations
     migrate();
+
+    // move infected to hospital
+    moveToHospital();
+    // move recovered out of hospital
+    moveFromHospital();
 
     updateStats();
 }
@@ -157,7 +161,7 @@ function getSafestDirection(person) {
 
 function infectNearby(infected) {
     population.forEach(person => {
-        if (person.status == status.HEALTHY
+        if (person.status === status.HEALTHY
             && dist(infected.x, infected.y, person.x, person.y) <= INFECTION_RADIUS) {
             if (random() < PHI) {
                 person.status = status.INFECTED;
@@ -173,6 +177,49 @@ function tryToHeal(person) {
             person.status = status.DECEASED;
         else
             person.status = status.HEALTHY;
+    }
+}
+
+function moveToHospital() {
+    if (hospitalTravelPlan.personIndex < 0) {
+        for (let i = 0; i < population.length; i++) {
+            if (population[i].box !== HOSPITAL
+                && hospitalTravelPlan.personIndex !== i
+                && population[i].status === status.INFECTED) {
+                if (random() < P_DETECTION) {
+                    hospitalTravelPlan.personIndex = i;
+                    hospitalTravelPlan.destinationX = floor((HOSPITAL.x1 + HOSPITAL.x2) / 2);
+                    hospitalTravelPlan.destinationY = floor((HOSPITAL.y1 + HOSPITAL.y2) / 2);
+                    population[i].box = HOSPITAL;
+                    break;
+                }
+            }
+        }
+
+    }
+    else {
+        moveTowardDestination(hospitalTravelPlan);
+    }
+}
+
+function moveFromHospital() {
+    if (recoveryPlan.personIndex < 0) {
+        for (let i = 0; i < population.length; i++) {
+            if (population[i].box === HOSPITAL && population[i].status === status.HEALTHY) {
+                // if (random() < P_DETECTION) {
+                let newBox = BOXES[floor(random(BOXES.length))];
+                recoveryPlan.personIndex = i;
+                recoveryPlan.destinationX = floor((newBox.x1 + newBox.x2) / 2);
+                recoveryPlan.destinationY = floor((newBox.y1 + newBox.y2) / 2);
+                population[i].box = newBox;
+                break;
+                // }
+            }
+        }
+
+    }
+    else {
+        moveTowardDestination(recoveryPlan);
     }
 }
 
@@ -193,28 +240,33 @@ function migrate() {
     }
     else {
         // move the currently migrating person towards destination
-        let moved = false;
-        let person = population[travelPlan.personIndex];
-        if (person.x + 20 < travelPlan.destinationX) {
-            person.x += 10;
-            moved = true;
-        }
-        if (person.x - 20 > travelPlan.destinationX) {
-            person.x -= 10;
-            moved = true;
-        }
-        if (person.y + 20 < travelPlan.destinationY) {
-            person.y += 10;
-            moved = true;
-        }
-        if (person.y - 20 > travelPlan.destinationY) {
-            person.y -= 10;
-            moved = true;
-        }
+        moveTowardDestination(travelPlan);
+    }
+}
 
-        // reached destination
-        if (!moved)
-            travelPlan.personIndex = -1;
+function moveTowardDestination(tPlan) {
+    let moved = false;
+    let person = population[tPlan.personIndex];
+    if (person.x + 20 < tPlan.destinationX) {
+        person.x += 10;
+        moved = true;
+    }
+    if (person.x - 20 > tPlan.destinationX) {
+        person.x -= 10;
+        moved = true;
+    }
+    if (person.y + 20 < tPlan.destinationY) {
+        person.y += 10;
+        moved = true;
+    }
+    if (person.y - 20 > tPlan.destinationY) {
+        person.y -= 10;
+        moved = true;
+    }
+
+    // reached destination
+    if (!moved) {
+        tPlan.personIndex = -1;
     }
 }
 
@@ -224,11 +276,11 @@ function updateStats() {
     let deceasedCount = 0;
 
     population.forEach(person => {
-        if (person.status == status.HEALTHY)
+        if (person.status === status.HEALTHY)
             healthyCount++;
-        if (person.status == status.INFECTED)
+        if (person.status === status.INFECTED)
             infectedCount++;
-        if (person.status == status.DECEASED)
+        if (person.status === status.DECEASED)
             deceasedCount++;
     });
 

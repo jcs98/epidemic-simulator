@@ -9,9 +9,10 @@ const BOXES = [
     { x1: 630, y1: 30, x2: 900, y2: 300 },
 
     { x1: 30, y1: 330, x2: 300, y2: 600 },
-    { x1: 330, y1: 330, x2: 600, y2: 600 },
-    { x1: 630, y1: 330, x2: 900, y2: 600 }
+    { x1: 330, y1: 330, x2: 600, y2: 600 }
 ]
+
+const HOSPITAL = { x1: 680, y1: 380, x2: 850, y2: 550 };
 
 
 function setup() {
@@ -24,20 +25,23 @@ function draw() {
     background(0);
     frameRate(FPS);
 
+    fill(0);
+    strokeWeight(3);
+    stroke(255);
+
     BOXES.forEach(box => {
-        fill(0);
-        strokeWeight(3);
-        stroke(255);
         rect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
-        stroke(0);
-        strokeWeight(1);
     });
+
+    rect(HOSPITAL.x1, HOSPITAL.y1, HOSPITAL.x2 - HOSPITAL.x1, HOSPITAL.y2 - HOSPITAL.y1);
 
     nextRound();
     drawPopulation();
 }
 
 function drawPopulation() {
+    stroke(0);
+    strokeWeight(1);
     for (let i = 0; i < population.length; i++) {
         const person = population[i];
 

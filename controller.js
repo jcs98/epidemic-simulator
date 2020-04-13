@@ -36,6 +36,13 @@ PHI_slider.addEventListener('input', e => {
     PHI_value.textContent = PHI;
 });
 
+const P_DETECTION_slider = document.querySelector('#P_DETECTION-slider');
+const P_DETECTION_value = document.querySelector('#P_DETECTION-value');
+P_DETECTION_slider.addEventListener('input', e => {
+    P_DETECTION += (P_DETECTION_slider.value / 100 - P_DETECTION)
+    P_DETECTION_value.textContent = P_DETECTION;
+});
+
 const PID_slider = document.querySelector('#PID-slider');
 const PID_value = document.querySelector('#PID-value');
 PID_slider.addEventListener('input', e => {
