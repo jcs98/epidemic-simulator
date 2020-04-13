@@ -18,8 +18,9 @@ const HOSPITAL = { x1: 680, y1: 380, x2: 850, y2: 550 };
 function setup() {
     let canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     canvas.parent("canvas-container");
-    setupPopulation();
+    setGraphOptions();
     setupControls();
+    setupPopulation();
 }
 
 function draw() {
@@ -71,6 +72,24 @@ function drawPopulation() {
     }
 }
 
+function setGraphOptions() {
+    Highcharts.setOptions({
+        chart: {
+            backgroundColor: "#000"
+        },
+        title: {
+            style: { color: '#bbb' }
+        },
+        credits: { enabled: false },
+        yAxis: { gridLineColor: '#333' },
+        legend: {
+            itemStyle: { color: '#bbb' },
+            itemHoverStyle: { color: '#FFF' },
+            itemHiddenStyle: { color: '#606063' }
+        }
+    });
+}
+
 function drawGraph() {
     const graph = {};
 
@@ -79,14 +98,7 @@ function drawGraph() {
 
     graph.xAxis = { categories: daysData };
     graph.yAxis = {
-        title: {
-            text: "Number of cases"
-        },
-        plotLines: [{
-            value: 0,
-            width: 1,
-            color: "#808080"
-        }]
+        title: { text: "Number of cases" }
     };
 
     graph.series = [
