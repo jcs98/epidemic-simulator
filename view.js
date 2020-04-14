@@ -1,8 +1,8 @@
 const CANVAS_WIDTH = 950;
 const CANVAS_HEIGHT = 650;
 
-const MOBILE_CANVAS_WIDTH = 330;
-const MOBILE_CANVAS_HEIGHT = 330;
+const MOBILE_CANVAS_WIDTH = 320;
+const MOBILE_CANVAS_HEIGHT = 320;
 
 const colors = { HEALTHY: "rgb(0, 123, 255)", INFECTED: "rgb(220, 53, 69)", DECEASED: "rgb(123, 123, 123)" }
 
@@ -18,10 +18,9 @@ const BOXES = [
 
 const HOSPITAL = { x1: 30 + 20, y1: 330 + 20, x2: 300 - 20, y2: 600 - 20 };
 
+const PERSON_RADIUS = 7;
 
 function setup() {
-    console.log($(window).width());
-
     let canvas;
     if (onMobile()) {
         canvas = createCanvas(MOBILE_CANVAS_WIDTH, MOBILE_CANVAS_HEIGHT);
@@ -82,12 +81,7 @@ function drawPopulation() {
         }
 
         fill(color(colors[person.status]))
-        ellipse(person.x, person.y, 10, 10);
-
-        // if (i == travelPlan.personIndex) {
-        //     fill(138, 43, 226);
-        //     ellipse(person.x, person.y, 10, 10);
-        // }
+        ellipse(person.x, person.y, PERSON_RADIUS, PERSON_RADIUS);
     }
 }
 

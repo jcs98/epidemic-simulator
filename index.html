@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genetic Traveller</title>
+    <title>Epidemic Simulator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.sound.min.js"></script>
@@ -19,68 +19,74 @@
         <a href="https://github.com/jcs98/epidemic-simulator" target="_blank" class="navbar-brand">
             Epidemic Simulator
         </a>
-        <div class="container-fluid">
-            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="container-fluid">
                 <!-- Controls -->
                 <div class="row mt-3">
 
-                    <div class="col">
-                        <label for="PHI">Probability of Contraction [P(H->I)]</label>
+                    <div class="col-md">
+                        <label for="PHI-slider">Contraction</label>
                         <div id="PHI-value" class="badge badge-primary float-right"></div>
-                        <input type="range" id="PHI-slider" class="custom-range" min="0" max="100" value="" step="1">
+                        <input type="range" id="PHI-slider" class="custom-range" min="0" max="5" value="" step="1">
                     </div>
 
-                    <div class="col">
-                        <label for="PID">Mortality Rate [P(I->D)]</label>
+                    <div class="col-md">
+                        <label for="PID-slider">Mortality</label>
                         <div id="PID-value" class="badge badge-primary float-right"></div>
-                        <input type="range" id="PID-slider" class="custom-range" min="0" max="100" value="" step="1">
+                        <input type="range" id="PID-slider" class="custom-range" min="0" max="10" value="" step="1">
                     </div>
 
-                    <div class="col">
-                        <label for="P_DETECTION">Probability of Detection</label>
+                    <div class="col-md">
+                        <label for="P_DETECTION-slider">Isolation</label>
                         <div id="P_DETECTION-value" class="badge badge-primary float-right"></div>
-                        <input type="range" id="P_DETECTION-slider" class="custom-range" min="0" max="100" value=""
+                        <input type="range" id="P_DETECTION-slider" class="custom-range" min="0" max="10" value=""
                             step="1">
                     </div>
 
-                    <div class="col">
-                        <label for="REPULSE">Social Distancing</label>
+                    <div class="col-md">
+                        <label for="REPULSE-slider">Social Distancing</label>
                         <div id="REPULSE-value" class="badge badge-primary float-right"></div>
-                        <input type="range" id="REPULSE-slider" class="custom-range" min="0" max="100" value=""
-                            step="1">
+                        <input type="range" id="REPULSE-slider" class="custom-range" min="0" max="70" value=""
+                            step="10">
                     </div>
 
-                    <div class="col">
-                        <label for="PTRAVEL">Travel Probability</label>
+                    <div class="col-md">
+                        <label for="PTRAVEL-slider">Travel</label>
                         <div id="PTRAVEL-value" class="badge badge-primary float-right"></div>
-                        <input type="range" id="PTRAVEL-slider" class="custom-range" min="0" max="100" value=""
+                        <input type="range" id="PTRAVEL-slider" class="custom-range" min="0" max="90" value=""
+                            step="10">
+                    </div>
+
+                    <div class="col-md">
+                        <label for="PCENTRAL_LOCATIONS-slider">Central Locations</label>
+                        <div id="PCENTRAL_LOCATIONS-value" class="badge badge-primary float-right"></div>
+                        <input type="range" id="PCENTRAL_LOCATIONS-slider" class="custom-range" min="0" max="5" value=""
                             step="1">
                     </div>
 
-
-                    <div class="col">
-                        <label for="FPS">Simulation Speed</label>
+                    <div class="col-md">
+                        <label for="FPS-slider">Simulation Speed</label>
                         <div id="FPS-value" class="badge badge-primary float-right"></div>
                         <input type="range" id="FPS-slider" class="custom-range" min="1" max="24" value="" step="1">
                     </div>
 
-                    <div class="col">
-                        <div class="playpause" title="[shortcut] press 'SPACE'">
-                            <input type="checkbox" value="None" id="playpause" name="check" />
-                            <label for="playpause" tabindex=1></label>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <button id="reset" class="btn btn-primary mt-2" title="[shortcut] press 'R'">Reset</button>
-                    </div>
                 </div>
 
             </div>
         </div>
+
+        <button id="reset" class="btn btn-primary mt-2 mx-4" title="[shortcut] press 'R'">Reset</button>
+
+        <div class="playpause mt-2 mx-4" title="[shortcut] press 'SPACE'">
+            <input type="checkbox" value="None" id="playpause" name="check" />
+            <label for="playpause" tabindex=1></label>
+        </div>
+
         <div class="mr-4">
             <a href="https://github.com/jcs98/GeneticTraveller" target="_blank">GitHub</a>
         </div>
@@ -88,7 +94,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col d-flex justify-content-center">
                 <div id="canvas-container"></div>
             </div>
 
@@ -100,13 +106,13 @@
                 </h5>
                 <h4 class="text-white mt-4" id="eradicated"></h4>
 
-                <div id="graph-container" class="mt-4"></div>
+                <div id="graph-container" class="mt-4 px-md-5"></div>
             </div>
 
         </div>
     </div>
 
-    <div class="container-fluid text-center text-muted">
+    <div class="container-fluid text-center text-muted pb-4">
         [ This is just a simulation and does not represent any real
         world data or situations in any way. ]
     </div>

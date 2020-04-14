@@ -32,36 +32,43 @@ $('#reset').on('click', reset);
 const PHI_slider = document.querySelector('#PHI-slider');
 const PHI_value = document.querySelector('#PHI-value');
 PHI_slider.addEventListener('input', e => {
-    PHI += (PHI_slider.value / 100 - PHI)
-    PHI_value.textContent = PHI;
+    PHI += ((PHI_slider.value / 100).toFixed(2) - PHI)
+    PHI_value.textContent = floor(PHI * 100) + " %";
 });
 
 const P_DETECTION_slider = document.querySelector('#P_DETECTION-slider');
 const P_DETECTION_value = document.querySelector('#P_DETECTION-value');
 P_DETECTION_slider.addEventListener('input', e => {
-    P_DETECTION += (P_DETECTION_slider.value / 100 - P_DETECTION)
-    P_DETECTION_value.textContent = P_DETECTION;
+    P_DETECTION += ((P_DETECTION_slider.value / 100).toFixed(2) - P_DETECTION)
+    P_DETECTION_value.textContent = floor(P_DETECTION * 100) + " %";
 });
 
 const PID_slider = document.querySelector('#PID-slider');
 const PID_value = document.querySelector('#PID-value');
 PID_slider.addEventListener('input', e => {
-    PID += (PID_slider.value / 100 - PID)
-    PID_value.textContent = PID;
+    PID += ((PID_slider.value / 100).toFixed(2) - PID)
+    PID_value.textContent = floor(PID * 100) + " %";
 });
 
 const PTRAVEL_slider = document.querySelector('#PTRAVEL-slider');
 const PTRAVEL_value = document.querySelector('#PTRAVEL-value');
 PTRAVEL_slider.addEventListener('input', e => {
-    PTRAVEL += (PTRAVEL_slider.value / 100 - PTRAVEL)
-    PTRAVEL_value.textContent = PTRAVEL;
+    PTRAVEL += ((PTRAVEL_slider.value / 100).toFixed(2) - PTRAVEL)
+    PTRAVEL_value.textContent = floor(PTRAVEL * 100) + " %";
 });
 
 const REPULSE_slider = document.querySelector('#REPULSE-slider');
 const REPULSE_value = document.querySelector('#REPULSE-value');
 REPULSE_slider.addEventListener('input', e => {
-    REPULSE += (REPULSE_slider.value / 100 - REPULSE)
-    REPULSE_value.textContent = REPULSE;
+    REPULSE += ((REPULSE_slider.value / 100).toFixed(2) - REPULSE)
+    REPULSE_value.textContent = floor(REPULSE * 100) + " %";
+});
+
+const PCENTRAL_LOCATIONS_slider = document.querySelector('#PCENTRAL_LOCATIONS-slider');
+const PCENTRAL_LOCATIONS_value = document.querySelector('#PCENTRAL_LOCATIONS-value');
+PCENTRAL_LOCATIONS_slider.addEventListener('input', e => {
+    PCENTRAL_LOCATIONS += ((PCENTRAL_LOCATIONS_slider.value / 100).toFixed(2) - PCENTRAL_LOCATIONS)
+    PCENTRAL_LOCATIONS_value.textContent = floor(PCENTRAL_LOCATIONS * 100) + " %";
 });
 
 const FPS_slider = document.querySelector('#FPS-slider');
@@ -72,20 +79,23 @@ FPS_slider.addEventListener('input', e => {
 });
 
 function setupControls() {
-    PHI_slider.value = PHI * 100;
-    PHI_value.textContent = PHI;
+    PHI_slider.value = floor(PHI * 100);
+    PHI_value.textContent = floor(PHI * 100) + " %";
 
-    P_DETECTION_slider.value = P_DETECTION * 100;
-    P_DETECTION_value.textContent = P_DETECTION;
+    P_DETECTION_slider.value = floor(P_DETECTION * 100);
+    P_DETECTION_value.textContent = floor(P_DETECTION * 100) + " %";
 
-    PID_slider.value = PID * 100;
-    PID_value.textContent = PID;
+    PID_slider.value = floor(PID * 100);
+    PID_value.textContent = floor(PID * 100) + " %";
 
-    PTRAVEL_slider.value = PTRAVEL * 100;
-    PTRAVEL_value.textContent = PTRAVEL;
+    PTRAVEL_slider.value = floor(PTRAVEL * 100);
+    PTRAVEL_value.textContent = floor(PTRAVEL * 100) + " %";
 
-    REPULSE_slider.value = REPULSE * 100;
-    REPULSE_value.textContent = REPULSE;
+    REPULSE_slider.value = floor(REPULSE * 100);
+    REPULSE_value.textContent = floor(REPULSE * 100) + " %";
+
+    PCENTRAL_LOCATIONS_slider.value = floor(PCENTRAL_LOCATIONS * 100);
+    PCENTRAL_LOCATIONS_value.textContent = floor(PCENTRAL_LOCATIONS * 100) + " %";
 
     FPS_slider.value = FPS;
     FPS_value.textContent = FPS;

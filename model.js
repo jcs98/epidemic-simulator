@@ -1,17 +1,17 @@
 // control params
-let PHI = 0.1;
-let PID = 0.2;
-let P_DETECTION = 0.1;
-let REPULSE = 0.1;
+let PHI = 0.02;
+let PID = 0.03;
+let P_DETECTION = 0.01;
+let REPULSE = 0;
 let PTRAVEL = 0.7;
 let FPS = 12;
+let PCENTRAL_LOCATIONS = 0.03;
 
 // other params
-const POP_SIZE = 50; // per box
-const INFECTION_RADIUS = 20;
-const INFECTION_DAYS = 280;
+const POP_SIZE = 200; // per box
+const INFECTION_RADIUS = 12;
+const INFECTION_DAYS = 200;
 const DIRECTION_CHANGE_PROB = 0.3;
-const PCENTRAL_LOCATIONS = 0.001;
 
 let paused = false;
 let days;
@@ -89,17 +89,20 @@ function actions() {
         // if infected -> infect nearby, try to heal
         if (person.status === status.INFECTED) {
             person.infectedDays++;
-            infectNearby(person);
+            if (person.box !== HOSPITAL)
+                infectNearby(person);
             tryToHeal(person);
         }
     });
 
-    // set move to central locations
-    setMoveToCentral();
-    // random migrations
-    setMigration();
-    // move infected to hospital
-    detectAndSetMoveToHospital();
+    if (days % 25 == 0) {
+        // set move to central locations
+        setMoveToCentral();
+        // random migrations
+        setMigration();
+        // move infected to hospital
+        detectAndSetMoveToHospital();
+    }
     // move recovered out of hospital
     setMoveFromHospital();
 }
@@ -137,7 +140,7 @@ function getSafestDirection(person) {
 
     population.forEach(p => {
         if (person.box === p.box) {
-            let d = dist(person.x, person.y, p.x, p.y);
+            let d = squaredDistance(person.x, person.y, p.x, p.y);
             if (p.x < person.x && leftClosest > d)
                 leftClosest = d;
             if (p.x > person.x && rightClosest > d)
@@ -170,7 +173,7 @@ function getSafestDirection(person) {
 function infectNearby(infected) {
     population.forEach(person => {
         if (person.status === status.HEALTHY
-            && dist(infected.x, infected.y, person.x, person.y) <= INFECTION_RADIUS) {
+            && squaredDistance(infected.x, infected.y, person.x, person.y) <= INFECTION_RADIUS * INFECTION_RADIUS) {
             if (random() < PHI) {
                 person.status = status.INFECTED;
                 person.infectedDays = 0;
@@ -227,8 +230,8 @@ function setMigration() {
             let newBox = BOXES[floor(random(BOXES.length))];
             person.box = newBox;
             person.isTravelling = true;
-            person.destinationX = floor((newBox.x1 + newBox.x2) / 2);
-            person.destinationY = floor((newBox.y1 + newBox.y2) / 2);
+            person.destinationX = randomIntFromRange(newBox.x1, newBox.x2)
+            person.destinationY = randomIntFromRange(newBox.y1, newBox.y2)
         }
     }
 }
