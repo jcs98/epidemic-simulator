@@ -48,6 +48,10 @@ canvas {
 }
 
 @media only screen and (max-width: 768px) {
+    #app-name {
+        width: 250px;
+    }
+
     #graph-container {
         height: 250px;
     }
